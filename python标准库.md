@@ -328,3 +328,55 @@ for key, group in itertools.groupby(colors, key=len):
 # 5 ['black', 'green']
 ```
 
+## base64
+
+```
+>>> import base64
+>>> base64.b64encode(b'binary\x00string')
+b'YmluYXJ5AHN0cmluZw=='
+>>> base64.b64decode(b'YmluYXJ5AHN0cmluZw==')
+b'binary\x00string'
+
+
+>>> base64.b64encode(b'i\xb7\x1d\xfb\xef\xff')
+b'abcd++//'
+>>> base64.urlsafe_b64encode(b'i\xb7\x1d\xfb\xef\xff')
+b'abcd--__'
+>>> base64.urlsafe_b64decode('abcd--__')
+b'i\xb7\x1d\xfb\xef\xff'
+```
+
+## hashlib
+
+计算md5：128 bit/16字节，通常用32个16进制字符表示
+
+```python
+import hashlib
+
+md5 = hashlib.md5()
+md5.update('how to use md5 in python hashlib?'.encode('utf-8'))
+print(md5.hexdigest())
+
+# 如果数据量很大，可以分块多次调用update()，最后计算的结果是一样的
+md5 = hashlib.md5()
+md5.update('how to use md5 in '.encode('utf-8'))
+md5.update('python hashlib?'.encode('utf-8'))
+print(md5.hexdigest())
+```
+
+SHA1：160 bit/20字节，通常用40个16进制字符表示
+
+```python
+import hashlib
+
+sha1 = hashlib.sha1()
+sha1.update('how to use sha1 in '.encode('utf-8'))
+sha1.update('python hashlib?'.encode('utf-8'))
+print(sha1.hexdigest())
+```
+
+SHA256和SHA512用法类似
+
+### 加盐
+
+用户输入的简单密码，比如 123456，拼接上一个复杂的字符串（叫做盐），然后对 `123456Salt`计算出hash值。这个hash值就是要保存的密码。
