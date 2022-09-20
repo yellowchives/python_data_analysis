@@ -3,6 +3,8 @@
 ## 概述
 支持常见的数组和矩阵操作，通过`ndarray`类实现了对多维数组的封装，提供了操作这些数组的方法和函数集。
 
+Numpy 并没有提供很多统计的算法，算法主要使用 pandas 等模块，它们都可以操作 ndarray 对象。
+
 为什么numpy运行的速度更快？
 
 1. numpy 底层是由c语言编写的。
@@ -49,16 +51,22 @@
    np.full((3, 4), 8.8)
    # 创建n=3的单位矩阵
    np.eye(3)
+   # 创建没有初始化的数组
+   np.empty((2, 3))
    # 创建等差数组
    np.arange(1, 10, 2)
    # 数组有4个元素，均匀分布在0到1之间
    np.linspace(0, 1, 4)
    
-   # 创建3X3的，[0,1)之间均匀分布的随机数组
+   # 创建3X3的，[0,1)之间的随机数组
    下面两个方法一样，但是参数不一样
+   # 均匀分布
    np.random.random((3, 3)) 接收元组
    np.random.rand(3, 4) 接受可变参数
-   # 创建3X3的，均值为0，标准差为1的正态分布的随机数组
+   # 标准正态分布
+   np.random.randn(3, 4) 
+   np.random.standard_normal(3, 4)
+   # 一般正态分布
    np.random.normal(0, 1, (3, 3))
    # 创建3X3的，[0, 10)之间的随机整数数组
    np.random.randint(0, 10, (3, 3))
@@ -107,9 +115,13 @@ a[0, 2]
 a[0][2]
 ```
 
-**类型转换：**
+注意：行所在的轴叫做0轴，列所在的轴叫做1轴。
+
+**数组的数据类型：**
 
 numpy数组的元素类型是确定的，如果把浮点数赋值给整型数组，会取整。
+
+创建 ndarray 时不指定 dtype，默认都是 float64。
 
 ```python
 x = np.full((2, 3), 1, dtype=int)
@@ -118,6 +130,17 @@ print(x)
 # [[1 1 1]
 # [1 1 2]]
 ```
+
+可以使用 astype() 显示转换数据类型：
+
+```python
+arr = np.array([1, 2, 3])
+print(arr.dtype)  # int
+float_arr = arr.astype(np.float64)
+print(float_arr.dtype)  # float64
+```
+
+astype() 还可以将字符串转成数值型，可能抛出 ValueError。
 
 **数组的切片：**
 
