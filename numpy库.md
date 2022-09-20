@@ -153,7 +153,7 @@ print(x[::-1, ::-1])
 
 ```
 
-获取数组的行列
+单独一个冒号代表获取整个轴，用这种方式可以获取数组的行列
 
 ```python
 # 获取第1行, 行索引从0开始
@@ -233,6 +233,7 @@ print(np.sin(x))
 x = np.arange(5)
 y = np.arange(5)
 print(x - y)
+np.maxium(x, y)
 ```
 
 **矩阵运算：**
@@ -261,37 +262,53 @@ y = x[:, np.newaxis]  # 列向量
 print(x + y)
 ```
 
-**比较运算和掩码：**
+**比较运算、逻辑运算和掩码：**
+
+numpy 使用C语言的符号，python的关键字 and、or都没用
 
 ```python
 # 下面所有的np都不能丢了
 x = np.random.randint(0, 9, (3, 3))
 print(x)
 print(x > 5)  # bool值组成的二维数组
+x[x !> 0] = 0  # 把所有不大于0的数设置成0
 print(np.sum(x > 5))  # 统计大于5的个数
 print(np.any(x > 10))  # False
 print(np.all(x < 10))  # True
-print(np.all(x < 5, axis=1))  # 按行判断，axis=0代表按列判断
+print(np.all(x < 5, axis=1))  # 按列判断
 print((x > 0) & (x < 7))
 
 print(x[x > 5])  # bool数组作为掩码获取数据
 ```
 
-**花哨的索引：**
+**神奇索引：**
 
+神奇索引：索引是数组 结果和索引的结构一样
 ```python
-x = np.random.randint(100, size=10)
-# 索引是数组 结果和索引的结构一样
-ids = [1, 5, 7]
-print(x[ids])
-ids = [[1, 2], [5, 7]]
-print(x[ids])
+x = np.random.randint(100, size=9).reshape(3, 3)
+
+ids = [1, 2]
+print(x[ids])  # 索引1，2行
 
 # 索引是多维数组
 rows = [1, 2]
 cols = [1, 2]
 x[rows, cols]  # x[1, 1] x[2, 2]
 ```
+神奇索引的结果总是一维的，比如上面的 x[rows, cols] 只返回了两个数据。
+
+结果和我的想法不一样，我想要的是二阶子式，应该这样写：
+```python
+x[[1, 2]][:, [1,2]]
+```
+
+**布尔索引常用来修改数据：**
+```python
+a = np.random.randn(3,3)
+print(a < 0)
+a[a < 0] = 0  # 把负数都设置成0
+```
+
 
 **排序：**
 
