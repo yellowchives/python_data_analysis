@@ -113,7 +113,7 @@ d = datetime.datetime(2000, 1, 1)
 print(d)
 # 一周前
 delta = datetime.timedelta(weeks=-1)
-d += delta
+d += delta  # datetime是不可变对象，这里返回新的对象
 print(d)
 ```
 
@@ -295,6 +295,18 @@ for i in zip('abc', '123', '$#!'):
 # ('c', '3', '!')
 ```
 
+给定一个已“配对”的序列时，zip函数有一种机智的方式去“拆分”序列。这种方式的另一种思路就是将行的列表转换为列的列表。语法看上去略显魔幻：
+
+```python
+pics = [('Steve', 'Curry'), ('James', 'Harden'), ('Dim', "Decon")]
+firstnames, lastnames = zip(*pics)
+
+print(firstnames)
+print(lastnames)
+```
+
+
+
 **无穷迭代器：**
 
 count(start=0, step=1) 从初始值开始，返回一个无穷的流
@@ -380,3 +392,26 @@ SHA256和SHA512用法类似
 ### 加盐
 
 用户输入的简单密码，比如 123456，拼接上一个复杂的字符串（叫做盐），然后对 `123456Salt`计算出hash值。这个hash值就是要保存的密码。
+
+## functools
+
+柯里化是计算机科学术语（以数学家Haskell Curry命名），它表示通过部分参数应用的方式从已有的函数中衍生出新的函数。例如，假设我们有一个不重要的函数，其功能是将两个数加一起：
+
+```python
+def add_numbers(x, y):
+    return x + y
+```
+
+使用这个函数，我们可以衍生出一个只有一个变量的新函数，add_five，可以给参数加上5：
+
+```python
+add_five = lambda y : add_number(5, y) 
+```
+
+第二个参数对于函数add_numers就是柯里化了。这里并没有什么神奇的地方，我们真正做的事只是定义了一个新函数，这个新函数调用了已经存在的函数。内建的functools模块可以使用pratial函数简化这种处理：
+
+```python
+from functools import partial
+add_five = partial(add_numbers, 5)
+```
+

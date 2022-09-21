@@ -3,6 +3,8 @@
 ## 概述
 支持常见的数组和矩阵操作，通过`ndarray`类实现了对多维数组的封装，提供了操作这些数组的方法和函数集。
 
+Numpy 并没有提供很多统计的算法，算法主要使用 pandas 等模块，它们都可以操作 ndarray 对象。
+
 为什么numpy运行的速度更快？
 
 1. numpy 底层是由c语言编写的。
@@ -11,7 +13,11 @@
 
 什么时候用numpy？
 
+numpy 可以使用数组表达式完成多种数据操作，而不用写大量的循环，这种利用数组表达式替代显示循环的方法，叫做向量化。
+
 遇到使用python for循环处理一些向量化、矩阵化操作的时候，优先考虑使用numpy。
+
+> https://numpy.org/doc/stable/reference/index.html
 
 ## numpy数组的创建
 
@@ -34,8 +40,6 @@
    
    ```
 
-   
-
 2. 从头创建数组
 
    ```python
@@ -49,16 +53,22 @@
    np.full((3, 4), 8.8)
    # 创建n=3的单位矩阵
    np.eye(3)
+   # 创建没有初始化的数组
+   np.empty((2, 3))
    # 创建等差数组
    np.arange(1, 10, 2)
    # 数组有4个元素，均匀分布在0到1之间
    np.linspace(0, 1, 4)
    
-   # 创建3X3的，[0,1)之间均匀分布的随机数组
+   # 创建3X3的，[0,1)之间的随机数组
    下面两个方法一样，但是参数不一样
+   # 均匀分布
    np.random.random((3, 3)) 接收元组
    np.random.rand(3, 4) 接受可变参数
-   # 创建3X3的，均值为0，标准差为1的正态分布的随机数组
+   # 标准正态分布
+   np.random.randn(3, 4) 
+   np.random.standard_normal(3, 4)
+   # 一般正态分布
    np.random.normal(0, 1, (3, 3))
    # 创建3X3的，[0, 10)之间的随机整数数组
    np.random.randint(0, 10, (3, 3))
@@ -107,9 +117,13 @@ a[0, 2]
 a[0][2]
 ```
 
-**类型转换：**
+注意：行所在的轴叫做0轴，列所在的轴叫做1轴。
+
+**数组的数据类型：**
 
 numpy数组的元素类型是确定的，如果把浮点数赋值给整型数组，会取整。
+
+创建 ndarray 时不指定 dtype，默认都是 float64。
 
 ```python
 x = np.full((2, 3), 1, dtype=int)
@@ -118,6 +132,17 @@ print(x)
 # [[1 1 1]
 # [1 1 2]]
 ```
+
+可以使用 astype() 显示转换数据类型：
+
+```python
+arr = np.array([1, 2, 3])
+print(arr.dtype)  # int
+float_arr = arr.astype(np.float64)
+print(float_arr.dtype)  # float64
+```
+
+astype() 还可以将字符串转成数值型，可能抛出 ValueError。
 
 **数组的切片：**
 
@@ -130,7 +155,7 @@ print(x[::-1, ::-1])
 
 ```
 
-获取数组的行列
+单独一个冒号代表获取整个轴，用这种方式可以获取数组的行列
 
 ```python
 # 获取第1行, 行索引从0开始
@@ -210,6 +235,7 @@ print(np.sin(x))
 x = np.arange(5)
 y = np.arange(5)
 print(x - y)
+np.maxium(x, y)
 ```
 
 **矩阵运算：**
@@ -238,43 +264,68 @@ y = x[:, np.newaxis]  # 列向量
 print(x + y)
 ```
 
-**比较运算和掩码：**
+**网格坐标矩阵：**
+
+meshgrid()
+
+**比较运算、逻辑运算和掩码：**
+
+numpy 使用C语言的符号，python的关键字 and、or都没用
 
 ```python
 # 下面所有的np都不能丢了
 x = np.random.randint(0, 9, (3, 3))
 print(x)
 print(x > 5)  # bool值组成的二维数组
+x[x !> 0] = 0  # 把所有不大于0的数设置成0
 print(np.sum(x > 5))  # 统计大于5的个数
 print(np.any(x > 10))  # False
 print(np.all(x < 10))  # True
-print(np.all(x < 5, axis=1))  # 按行判断，axis=0代表按列判断
+print(np.all(x < 5, axis=1))  # 按列判断
 print((x > 0) & (x < 7))
 
 print(x[x > 5])  # bool数组作为掩码获取数据
+# where()的作用类似if...else
+a = np.arange(-10, 10, 1)
+cond = a > 0
+a = np.where(cond, 2, -2)  # 把a中大于0的数都变成2，否则变成-2
 ```
 
-**花哨的索引：**
+**神奇索引：**
 
+神奇索引：索引是数组 结果和索引的结构一样
 ```python
-x = np.random.randint(100, size=10)
-# 索引是数组 结果和索引的结构一样
-ids = [1, 5, 7]
-print(x[ids])
-ids = [[1, 2], [5, 7]]
-print(x[ids])
+x = np.random.randint(100, size=9).reshape(3, 3)
+
+ids = [1, 2]
+print(x[ids])  # 索引1，2行
 
 # 索引是多维数组
 rows = [1, 2]
 cols = [1, 2]
 x[rows, cols]  # x[1, 1] x[2, 2]
 ```
+神奇索引的结果总是一维的，比如上面的 x[rows, cols] 只返回了两个数据。
+
+结果和我的想法不一样，我想要的是二阶子式，应该这样写：
+```python
+x[[1, 2]][:, [1,2]]
+```
+
+**布尔索引常用来修改数据：**
+
+```python
+a = np.random.randn(3,3)
+print(a < 0)
+a[a < 0] = 0  # 把负数都设置成0
+```
+
 
 **排序：**
 
 np.sort(x) 返回新的排序数组
 
-x.sort() 原地排序
+x.sort() 原地排序，可以指定按轴排序
 
 np.argsort(x) 返回数组中元素对应的位置
 
@@ -297,7 +348,39 @@ np.sum(x, axios=1) 按行求和
 
 np.sum(x, axios=0) 按列求和
 
+布尔值在底层是1和0，所以布尔值数组也可以求和。
+
 np.prod(x) x.prod() 求积，就是元素按个相乘。与求和类似，可以按行按列运算。
+
+**过滤:**
+
+np.unique()
+
+**累积数组：**
+
+np.cumsum 和 np.cumprod都可以把数组转成累计数组，前者是累积和，后者是累积积
+
+```python
+In [186]: arr = np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+In [187]: arr
+Out[187]:
+array([[0, 1, 2],
+[3, 4, 5],
+[6, 7, 8]])
+In [188]: arr.cumsum(axis=0)  # 每行累计
+Out[188]:
+array([[ 0,  1,  2],
+[ 3,  5,  7],
+[ 9, 12, 15]])
+In [189]: arr.cumprod(axis=1)  # 每列累计
+Out[189]:
+array([[  0,    0,    0],
+[  3,  12,  60],
+[  6,  42, 336]])
+
+```
+
+
 
 ## 统计
 
@@ -317,7 +400,6 @@ np.median(x)  # 中位数
 np.mean(x)  # 均值
 np.std(x)  # 标准差
 np.var(x)  # 方差
+# 上面的方法都有ndarray实例方法版本
 ```
-
-
 
