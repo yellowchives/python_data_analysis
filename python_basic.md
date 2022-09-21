@@ -918,31 +918,15 @@ f.close()
 f = open('D:/code/hello.txt', 'w', encoding='utf-8')
 ```
 
-文本操作：
-
 ```python
 f.read() #读取文件所有内容，支持二进制文件
 f.read(1024) #读取1024个字符
 f.readlines() #读取文本文件的所有行，返回一个list
-write(s) # 将字符串写入文件，返回写入的字符数
-writelines(lines)  # 向文件写入一个字符串列表。需要手动添加换行符
-flush() #刷新缓冲区
 ```
 
 > python标准库内置函数open：https://docs.python.org/zh-cn/3/library/functions.html#open
 
 f.seek(移动距离，起始位置)：此方法用来移动文件指针，单位是字节
-
-二进制文件操作：
-
-```python
-read() #读取所有字节
-readline() #读取一行
-write()
-writeline()
-```
-
-
 
 ## os模块
 

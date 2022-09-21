@@ -380,39 +380,3 @@ SHA256和SHA512用法类似
 ### 加盐
 
 用户输入的简单密码，比如 123456，拼接上一个复杂的字符串（叫做盐），然后对 `123456Salt`计算出hash值。这个hash值就是要保存的密码。
-
-## urllib.request
-
-```python
-import urllib.request
-
-url = 'www.whether.com?city=shanghai'
-
-req = urllib.request.Request(url) # 创建Request对象，默认是get请求
-with urllib.request.urlopen(req) as response: # 发送请求，收到响应
-    data = response.read()  # 读取所有字节
-    json_data = data.decode('gbk')
-    print(json_data)
-    
-```
-
-post方式：
-
-```python
-import urllib.request
-import urllib
-
-url = 'www.whether.com?city=shanghai'
-
-req_body = {'city':'shanghai', 'date':'20220921'}
-req_str = urllib.parse.urlencode()
-
-req = urllib.request.Request(url) # 创建Request对象，默认是get请求
-with urllib.request.urlopen(req) as response: # 发送请求，收到响应
-    data = response.read()  # 读取所有字节
-    json_data = data.decode('gbk')
-    print(json_data)
-```
-
-
-
