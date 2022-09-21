@@ -13,7 +13,11 @@ Numpy 并没有提供很多统计的算法，算法主要使用 pandas 等模块
 
 什么时候用numpy？
 
+numpy 可以使用数组表达式完成多种数据操作，而不用写大量的循环，这种利用数组表达式替代显示循环的方法，叫做向量化。
+
 遇到使用python for循环处理一些向量化、矩阵化操作的时候，优先考虑使用numpy。
+
+> https://numpy.org/doc/stable/reference/index.html
 
 ## numpy数组的创建
 
@@ -35,8 +39,6 @@ Numpy 并没有提供很多统计的算法，算法主要使用 pandas 等模块
    print(y.shape)  # (3, 3)    
    
    ```
-
-   
 
 2. 从头创建数组
 
@@ -262,6 +264,10 @@ y = x[:, np.newaxis]  # 列向量
 print(x + y)
 ```
 
+**网格坐标矩阵：**
+
+meshgrid()
+
 **比较运算、逻辑运算和掩码：**
 
 numpy 使用C语言的符号，python的关键字 and、or都没用
@@ -279,6 +285,10 @@ print(np.all(x < 5, axis=1))  # 按列判断
 print((x > 0) & (x < 7))
 
 print(x[x > 5])  # bool数组作为掩码获取数据
+# where()的作用类似if...else
+a = np.arange(-10, 10, 1)
+cond = a > 0
+a = np.where(cond, 2, -2)  # 把a中大于0的数都变成2，否则变成-2
 ```
 
 **神奇索引：**
@@ -303,6 +313,7 @@ x[[1, 2]][:, [1,2]]
 ```
 
 **布尔索引常用来修改数据：**
+
 ```python
 a = np.random.randn(3,3)
 print(a < 0)
@@ -314,7 +325,7 @@ a[a < 0] = 0  # 把负数都设置成0
 
 np.sort(x) 返回新的排序数组
 
-x.sort() 原地排序
+x.sort() 原地排序，可以指定按轴排序
 
 np.argsort(x) 返回数组中元素对应的位置
 
@@ -337,7 +348,39 @@ np.sum(x, axios=1) 按行求和
 
 np.sum(x, axios=0) 按列求和
 
+布尔值在底层是1和0，所以布尔值数组也可以求和。
+
 np.prod(x) x.prod() 求积，就是元素按个相乘。与求和类似，可以按行按列运算。
+
+**过滤:**
+
+np.unique()
+
+**累积数组：**
+
+np.cumsum 和 np.cumprod都可以把数组转成累计数组，前者是累积和，后者是累积积
+
+```python
+In [186]: arr = np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8]])
+In [187]: arr
+Out[187]:
+array([[0, 1, 2],
+[3, 4, 5],
+[6, 7, 8]])
+In [188]: arr.cumsum(axis=0)  # 每行累计
+Out[188]:
+array([[ 0,  1,  2],
+[ 3,  5,  7],
+[ 9, 12, 15]])
+In [189]: arr.cumprod(axis=1)  # 每列累计
+Out[189]:
+array([[  0,    0,    0],
+[  3,  12,  60],
+[  6,  42, 336]])
+
+```
+
+
 
 ## 统计
 
@@ -357,7 +400,6 @@ np.median(x)  # 中位数
 np.mean(x)  # 均值
 np.std(x)  # 标准差
 np.var(x)  # 方差
+# 上面的方法都有ndarray实例方法版本
 ```
-
-
 
