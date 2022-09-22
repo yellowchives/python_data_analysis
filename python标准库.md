@@ -415,3 +415,44 @@ from functools import partial
 add_five = partial(add_numbers, 5)
 ```
 
+## timeit
+
+该模块使Python开发人员能够在一致的环境下运行函数，并且在多种操作系统下使用尽可能相似的机制，以实现跨平台计时。
+
+要使用timeit模块，首先创建一个Timer对象，其参数是两条Python语句。第1个参数是要为之计时的Python语句；第2个参数是建立测试的语句。timeit模块会统计多次执行语句要用多久。默认情况下，timeit会执行100万次语句，并在完成后返回一个浮点数格式的秒数。不过，既然这是执行100万次所用的秒数，就可以把结果视作执行1次所用的微秒数。此外，可以给timeit传入参数number，以指定语句的执行次数。
+
+```python
+import timeit
+
+
+# 测试生成1000个元素列表的方法运行时间
+# 使用拼接的方式
+def test1():
+    l = []
+    for i in range(1000):
+        l + l + [i]
+        
+# 使用append方式
+def test2():
+    l = []
+    for i in range(1000):
+        l.append(i)
+        
+# 使用列表生成式
+def test3():
+    l = [i for i in range(1000)]
+    
+# 使用列表构造器调用range()方法
+def test4():
+    l = list(range(1000))
+    
+
+
+if __name__ == '__main__':
+    t1 = timeit.Timer('test1()')
+    t2 = timeit.Timer('test2()')
+    t3 = timeit.Timer('test3()')
+    t4 = timeit.Timer('test4()')
+    print(t1.timeit(number=1000))
+```
+
