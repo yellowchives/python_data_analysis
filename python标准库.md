@@ -430,29 +430,32 @@ import timeit
 def test1():
     l = []
     for i in range(1000):
-        l + l + [i]
-        
+        l = l + [i]
+
+
 # 使用append方式
 def test2():
     l = []
     for i in range(1000):
         l.append(i)
-        
+
+
 # 使用列表生成式
 def test3():
     l = [i for i in range(1000)]
-    
+
+
 # 使用列表构造器调用range()方法
 def test4():
     l = list(range(1000))
-    
 
 
 if __name__ == '__main__':
-    t1 = timeit.Timer('test1()')
-    t2 = timeit.Timer('test2()')
-    t3 = timeit.Timer('test3()')
-    t4 = timeit.Timer('test4()')
-    print(t1.timeit(number=1000))
+    t1 = timeit.Timer('test1()', 'from __main__ import test1')
+    # t2 = timeit.Timer('test2()', 'from __main__ import test2')
+    # t3 = timeit.Timer('test3()', 'from __main__ import test3')
+    # t4 = timeit.Timer('test4()', 'from __main__ import test4')
+    print('test1()平均耗时', t1.timeit(number=1000), '毫秒')  # 重复运行1000次，单位是秒。那么运行一次的单位就是毫秒
+
 ```
 
