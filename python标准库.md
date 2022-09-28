@@ -18,6 +18,8 @@ degrees(x)：弧度x转成角度
 
 radians(x)：角度x转成弧度
 
+math.pi, math.e 常量
+
 ## time
 
 localtime(): 本地时间
@@ -365,7 +367,8 @@ b'i\xb7\x1d\xfb\xef\xff'
 ```python
 import hashlib
 
-md5 = hashlib.md5()
+md5 = hashlib.md5()  # 获取hash对象
+print(md5.digest_size)  # 查询字节长度 16
 md5.update('how to use md5 in python hashlib?'.encode('utf-8'))
 print(md5.hexdigest())
 
@@ -374,6 +377,9 @@ md5 = hashlib.md5()
 md5.update('how to use md5 in '.encode('utf-8'))
 md5.update('python hashlib?'.encode('utf-8'))
 print(md5.hexdigest())
+
+# 简单用法
+hashlib.sha224(b"Nobody inspects the spammish repetition").hexdigest()
 ```
 
 SHA1：160 bit/20字节，通常用40个16进制字符表示
@@ -383,15 +389,26 @@ import hashlib
 
 sha1 = hashlib.sha1()
 sha1.update('how to use sha1 in '.encode('utf-8'))
-sha1.update('python hashlib?'.encode('utf-8'))
 print(sha1.hexdigest())
 ```
 
 SHA256和SHA512用法类似
 
+通用的构造方法：`hashlib.new(name[, data])`，name是算法名
+
+```python
+h = hashlib.new('sha256', b'haha')
+print(h.hexdigest())
+```
+
+hashlib.algorithms_available变量代表当前Python解释器环境中，模块支持的hash算法列表
+
+
 ### 加盐
 
-用户输入的简单密码，比如 123456，拼接上一个复杂的字符串（叫做盐），然后对 `123456Salt`计算出hash值。这个hash值就是要保存的密码。
+用户输入的简单密码，比如 123456，拼接上一个复杂的字符串（叫做盐），然后对 `123456Salt`计算出hash值。这个hash值就是要保存的密码。不过要确保盐不会被盗取。
+
+因为用户名是唯一的，所以经常把用户名作为盐，这样就更安全了。
 
 ## functools
 

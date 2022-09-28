@@ -15,7 +15,17 @@ print(f'name is {name} and age is {age}')
 
 print()后面可以添加多个参数，会自动添加空格将它们拼接起来。
 
+![](python_basic.assets/1762677-20201007160425621-65170524.png)
+
 # 运算符
+
+算术运算符：`+ - * / // ** %`
+
+```
+# 同时得到商和余数
+>> divmod(10, 3)
+>> (3, 1)
+```
 
 逻辑运算符：
 
@@ -24,6 +34,15 @@ and or not
 位运算符：
 
 & | ~ ^(异或) >> <<
+
+成员运算符：
+
+in, not in
+
+身份运算符：
+
+is, is not 用来判断两个对象的引用是否相同，等价于 `if (id(x) == id(y))`
+注意`==` 用来判断两个对象的值是否一样
 
 # 分支和循环
 
@@ -566,6 +585,15 @@ trusted-host = https://pypi.tuna.tsinghua.edu.cn
 ## pip search失效
 
 > https://blog.csdn.net/shmily_ke/article/details/122463792
+
+## 命令
+
+- `pip install pillow`
+- 安装特定版本的package，通过使用==, >=, <=, >, <来指定一个版本号。`pip install 'Markdown>2.0,<2.0.3`
+- `pip uninstall pillow`
+- `pip list`
+- 将已安装的库列表保存起来，经常用作项目的依赖文件 `pip freeze > requirements.txt`
+- 根据依赖文件批量安装库 `pip install -r requirements.txt`
 
 # 类
 
