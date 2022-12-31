@@ -115,11 +115,27 @@ s3[:2]
 - index
 - values 返回元素值，这里不是data
 - dtype
+- name 可以为Series对象起一个name，索引也可以起名字
+
+```
+In [38]: obj4.name = 'population'
+In [39]: obj4.index.name = 'state'
+In [40]: obj4
+Out[40]:
+state
+California          NaN
+Ohio            35000.0
+Oregon          16000.0
+Texas           71000.0
+Name: population, dtype: float64
+```
+
+
 
 ### 常用方法
 - head() tail()
 - unique()
-- isnull() notnull()
+- isnull() notnull() 既是pandas内置函数又是实例方法
 - add() sub() mul() div()
 
 
@@ -184,6 +200,31 @@ s.isnull()
     c    False
     d     True
     dtype: bool
+
+使用NumPy的函数或NumPy风格的操作，比如使用布尔值数组进行过滤，与标量相乘，或是应用数学函数，这些操作将保存索引值连接：
+
+```
+In [21]: obj2[obj2 > 0]
+Out[21]:
+d     6
+b     7
+c     3
+dtype: int64
+In [22]: obj2 * 2
+Out[22]:
+d     12
+b     14
+a    -10
+c      6
+dtype: int64
+In [23]: np.exp(obj2)
+Out[23]:
+d      403.428793
+b     1096.633158
+a        0.006738
+c       20.085537
+dtype: float64
+```
 
 
 
